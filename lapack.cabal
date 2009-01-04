@@ -1,0 +1,46 @@
+name:            lapack
+Version:         0.1
+homepage:        http://github.com/patperry/lapack
+synopsis:        Bindings to the LAPACK library.
+description:
+    LAPACK is written in Fortran77 and provides routines for solving systems
+    of simultaneous linear equations, least-squares solutions of linear 
+    systems of equations, eigenvalue problems, and singular value problems. 
+    The associated matrix factorizations (LU, Cholesky, QR, SVD, Schur, 
+    generalized Schur) are also provided, as are related computations such as
+    reordering of the Schur factorizations and estimating condition numbers. 
+    Dense and banded matrices are handled, but not general sparse matrices. In 
+    all areas, similar functionality is provided for real and complex matrices,
+    in both single and double precision.
+    .
+    For more information, see the Netlib LAPACK webpage:
+    <http://www.netlib.org/lapack/> 
+    .
+category:        Math
+license:         BSD3
+license-file:    COPYING
+copyright:       (c) 2008. Patrick Perry <patperry@stanford.edu>
+author:          Patrick Perry
+maintainer:      Patrick Perry <patperry@stanford.edu>
+cabal-version: >= 1.2.0
+build-type:      Configure
+tested-with:     GHC ==6.10.1
+
+extra-source-files:     NEWS README TODO configure.ac configure
+                        aclocal.m4 m4/ax_lapack.m4 m4/ax_blas.m4 
+                        lapack.buildinfo.in cbits/config.h.in
+
+extra-tmp-files:        config.log config.status autom4te.cache
+                        lapack.buildinfo cbits/config.h
+
+library
+    hs-source-dirs:     lib
+    exposed-modules:    
+
+    includes:           cbits/config.h
+    include-dirs:       cbits
+    c-sources:          
+    ghc-options:        -Wall                   
+    extensions:         ForeignFunctionInterface
+    build-depends:      base, blas >=0.7
+    

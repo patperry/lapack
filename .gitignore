@@ -1,0 +1,7 @@
+cbits/config.h
+aclocal.m4
+config.log
+config.status
+configure
+dist
+lapack.buildinfo
