@@ -29,18 +29,24 @@ tested-with:     GHC ==6.10.1
 extra-source-files:     NEWS README TODO configure.ac configure
                         aclocal.m4 m4/ax_lapack.m4 m4/ax_blas.m4 
                         lapack.buildinfo.in cbits/config.h.in
-
+                        
 extra-tmp-files:        config.log config.status autom4te.cache
                         lapack.buildinfo cbits/config.h
 
 library
     hs-source-dirs:     lib
     exposed-modules:    
+    other-modules:
 
     includes:           cbits/config.h
     include-dirs:       cbits
+
     c-sources:          
+
     ghc-options:        -Wall                   
+
     extensions:         ForeignFunctionInterface
-    build-depends:      base, blas >=0.7
-    
+
+    build-depends:      base, blas >=0.7.5, ieee, permutation >=0.2,
+                        QuickCheck >=1.2, QuickCheck <2
+
