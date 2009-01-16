@@ -28,7 +28,7 @@ tested-with:     GHC ==6.10.1
 
 extra-source-files:     NEWS README TODO configure.ac configure
                         aclocal.m4 m4/ax_lapack.m4 m4/ax_blas.m4 
-                        lapack.buildinfo.in cbits/config.h.in
+                        lapack.buildinfo.in cbits/config.h.in cbits/LAPACK.h
                         
 extra-tmp-files:        config.log config.status autom4te.cache
                         lapack.buildinfo cbits/config.h
@@ -36,18 +36,24 @@ extra-tmp-files:        config.log config.status autom4te.cache
 library
     hs-source-dirs:     lib
     exposed-modules:
-                        Data.Matrix.UnitaryBase
+                        Data.Elem.LAPACK
+                        Data.Elem.LAPACK.C
     other-modules:
+                        Data.Elem.LAPACK.Double
+                        Data.Elem.LAPACK.Zomplex
+                        LAPACK.CTypes
 
-    includes:           cbits/config.h
+    includes:           config.h LAPACK.h
     include-dirs:       cbits
+    c-sources:          cbits/double.c cbits/zomplex.c
 
     c-sources:          
 
     ghc-options:        -Wall                   
 
-    extensions:         ForeignFunctionInterface
+    extensions:         FlexibleInstances
+                        ForeignFunctionInterface
 
-    build-depends:      base, blas >=0.7.5, ieee, permutation >=0.2,
+    build-depends:      base, blas >=0.8, ieee, permutation >=0.2,
                         QuickCheck >=1.2, QuickCheck <2
 
