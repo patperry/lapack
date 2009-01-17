@@ -38,9 +38,11 @@ library
     exposed-modules:
                         Data.Elem.LAPACK
                         Data.Elem.LAPACK.C
+                        Data.Matrix.House
     other-modules:
                         Data.Elem.LAPACK.Double
                         Data.Elem.LAPACK.Zomplex
+                        Data.Matrix.ReflectorBase
                         LAPACK.CTypes
 
     includes:           config.h LAPACK.h
@@ -53,7 +55,9 @@ library
 
     extensions:         FlexibleInstances
                         ForeignFunctionInterface
+                        GADTs
+                        MultiParamTypeClasses
 
     build-depends:      base, blas >=0.8, ieee, permutation >=0.2,
-                        QuickCheck >=1.2, QuickCheck <2
+                        monad-interleave, QuickCheck >=1.2, QuickCheck <2
 

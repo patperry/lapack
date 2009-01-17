@@ -25,9 +25,9 @@ class (BLAS3 e) => LAPACK e where
     larfg :: Int -> Ptr e -> Ptr e -> Int -> IO e
 
 instance LAPACK Double where
-    larfg n alpha x incx = with 0 $ \pBeta -> 
-        dlarfg n alpha x incx pBeta >> peek pBeta
+    larfg n alpha x incx = with 0 $ \pTau -> 
+        dlarfg n alpha x incx pTau >> peek pTau
 
 instance LAPACK (Complex Double) where
-    larfg n alpha x incx = with 0 $ \pBeta -> 
-        zlarfg n alpha x incx pBeta >> peek pBeta
+    larfg n alpha x incx = with 0 $ \pTau -> 
+        zlarfg n alpha x incx pTau >> peek pTau
