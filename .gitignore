@@ -1,7 +1,17 @@
+*.hi
+*.o
 cbits/config.h
 aclocal.m4
+autom4te.cache
 config.log
 config.status
 configure
 dist
 lapack.buildinfo
+tests/*.html
+tests/*.tix
+tests/.hpc
+tests/Makefile
+tests/test-real
+tests/test-complex
+

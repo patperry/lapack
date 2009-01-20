@@ -29,9 +29,11 @@ tested-with:     GHC ==6.10.1
 extra-source-files:     NEWS README TODO configure.ac configure
                         aclocal.m4 m4/ax_lapack.m4 m4/ax_blas.m4 
                         lapack.buildinfo.in cbits/config.h.in cbits/LAPACK.h
+                        tests/Makefile.in tests/Driver.hs tests/Main.hs
                         
 extra-tmp-files:        config.log config.status autom4te.cache
                         lapack.buildinfo cbits/config.h
+                        tests/Makefile
 
 library
     hs-source-dirs:     lib

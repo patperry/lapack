@@ -19,5 +19,5 @@ else
 fi
 AC_SUBST([BUILD_PACKAGE_BOOL])
 
-AC_CONFIG_FILES([lapack.buildinfo])
+AC_CONFIG_FILES([lapack.buildinfo tests/Makefile])
 AC_OUTPUT
