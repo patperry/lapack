@@ -1,6 +1,8 @@
 {-# LANGUAGE CPP #-}
 module Driver (
     E,
+    V,
+    M,
     
     AEq,
     (===),
@@ -26,6 +28,9 @@ import Test.QuickCheck
 import Text.Printf
 import Text.Show.Functions
 
+import Data.Vector.Dense( Vector )
+import Data.Matrix.Dense( Matrix )
+
 #ifdef COMPLEX
 field = "Complex Double"
 type E = Complex Double 
@@ -33,6 +38,9 @@ type E = Complex Double
 field = "Double"
 type E = Double
 #endif
+
+type V = Vector Int E
+type M = Matrix (Int,Int) E
 
 infix 4 ===, ~==
 

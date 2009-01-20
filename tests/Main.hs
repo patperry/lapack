@@ -4,6 +4,8 @@ import Control.Monad
 import System.Environment
 import Text.Printf
 
+import Orthogonal( tests_Orthogonal )
+
 main :: IO ()
 main = do
     args <- getArgs
@@ -25,5 +27,5 @@ main = do
     when (not . and $ results) $ fail "\nNot all tests passed!"
  where
 
-    tests = [ 
+    tests = [ ("Orthogonal Decompositions", tests_Orthogonal)
             ] :: [(String, [(String, Int -> IO (Bool, Int))])]
