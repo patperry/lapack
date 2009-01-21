@@ -131,7 +131,7 @@ setReflector x = unsafePerformIOWithVector x $
 {-# INLINE setReflector #-}
 
 -- | Get an elementary reflector @H@ that transforms the vector @x@ to be
--- parallel with the first basis vector, along with value @(H x)_1@.
+-- parallel with the first basis vector, along with value @(H' x)_1@.
 getReflector :: (ReadVector x m, LAPACK e)
              => x n e
              -> m (Reflector (n,n) e, e)
@@ -141,7 +141,7 @@ getReflector x = unsafePerformIOWithVector x $ \x' -> do
 {-# INLINE getReflector #-}
 
 -- | Get an elementary reflector @H@ that transforms the vector @x@ to be
--- parallel with the first basis vector, along with value @(H x)_1@.
+-- parallel with the first basis vector, along with value @(H' x)_1@.
 reflector :: (LAPACK e) => Vector n e -> (Reflector (n,n) e, e)
 reflector x = runST $ getReflector x
 {-# INLINE reflector #-}
