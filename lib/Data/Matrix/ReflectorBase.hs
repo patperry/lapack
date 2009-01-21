@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances, GADTs, MultiParamTypeClasses #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module     : Data.Matrix.ReflectorBase
@@ -57,8 +58,8 @@ unsafeDoSApplyReflectorVector_ k (Reflector v tau) x
             x1  <- unsafeReadElem x 0
             vx2 <- unsafeGetDot v x2
             let alpha = -tau*(x1 + vx2)
-            unsafeWriteElem x 0 (x1 - alpha)
-            unsafeAxpyVector alpha v x
+            unsafeWriteElem x 0 (x1 + alpha)
+            unsafeAxpyVector alpha v x2
   where
     n  = dim x
 {-# INLINE unsafeDoSApplyReflectorVector_ #-}
@@ -73,9 +74,9 @@ unsafeDoSApplyReflectorMatrix_ k (Reflector v tau) a
             a2 = unsafeSubmatrixView a (1,0) (n-1,p)
         in do
             scaleBy k a
-            z <- newCopyVector a1
+            z <- newCopyVector (conj a1)
             unsafeDoSApplyAddVector 1 (herm a2) v 1 z
-            unsafeAxpyVector (-tau) z a1
+            unsafeAxpyVector (-tau) (conj z) a1
             unsafeRank1UpdateMatrix a2 (-tau) v z
   where (n,p) = shape a
 {-# INLINE unsafeDoSApplyReflectorMatrix_ #-}
@@ -106,7 +107,7 @@ unsafeGetColReflector r@(Reflector _ _) j = do
     return e
 {-# INLINE unsafeGetColReflector #-}
     
--- | Compute an elementary reflector @H@ such that @H x = beta e_1@.  The
+-- | Compute an elementary reflector @H@ such that @H' x = beta e_1@.  The
 -- reflector H is represented as @H = I - tau (1; v) (1; v)'@.  The function
 -- sets the first element of @x@ to @beta@, sets the rest of the components
 -- to @v@, and returns @tau@.  The function returns the resulting reflector,
@@ -115,13 +116,15 @@ unsafeGetColReflector r@(Reflector _ _) j = do
 setReflector :: (WriteVector x m, LAPACK e) 
              => x n e 
              -> m (Reflector (n,n) e, e)
+setReflector x | dim x == 0 = 
+    fail $ "setReflector <vector of dim 0>: dimension must be positive."
 setReflector x = unsafePerformIOWithVector x $ 
     \(IOVector c n f p inc) -> 
         let p1 = p `advancePtr` inc 
             v  = unsafeIOVectorToVector $ IOVector NoConj (n-1) f p1 inc
         in do
             when (c == Conj) $ doConjVector (IOVector c n f p inc)
-            tau  <- larfg (n-1) p p1 inc
+            tau  <- larfg n p p1 inc
             beta <- peek p
             touchForeignPtr f
             return $ (Reflector v tau, beta)
