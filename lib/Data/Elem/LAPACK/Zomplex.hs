@@ -13,8 +13,17 @@ module Data.Elem.LAPACK.Zomplex
 
 import Data.Complex( Complex )
 import Foreign( Ptr )
+import LAPACK.CTypes
 
 type Zomplex = Complex Double
 
-foreign import ccall unsafe "BLAS.h lapack_zlarfg"
+foreign import ccall unsafe "LAPACK.h lapack_zlarfg"
     zlarfg :: Int -> Ptr Zomplex -> Ptr Zomplex -> Int -> Ptr Zomplex -> IO ()
+
+foreign import ccall unsafe "LAPACK.h lapack_dormqr"
+    zunmqr :: CBLASSide -> CBLASTrans -> Int -> Int -> Int -> Ptr Zomplex -> Int -> Ptr Zomplex
+           -> Ptr Zomplex -> Int -> Ptr Zomplex -> Int -> IO Int
+
+foreign import ccall unsafe "LAPACK.h lapack_dormlq"
+    zunmlq :: CBLASSide -> CBLASTrans -> Int -> Int -> Int -> Ptr Zomplex -> Int -> Ptr Zomplex
+           -> Ptr Zomplex -> Int -> Ptr Zomplex -> Int -> IO Int

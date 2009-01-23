@@ -45,14 +45,13 @@ library
     other-modules:
                         Data.Elem.LAPACK.Double
                         Data.Elem.LAPACK.Zomplex
+                        Data.Matrix.HouseBase
                         Data.Matrix.ReflectorBase
                         LAPACK.CTypes
 
     includes:           config.h LAPACK.h
     include-dirs:       cbits
     c-sources:          cbits/double.c cbits/zomplex.c
-
-    c-sources:          
 
     ghc-options:        -Wall                   
 

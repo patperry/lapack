@@ -16,6 +16,11 @@ module Data.Matrix.House (
     getReflector,
     setReflector,
     
+    -- * Blocks of reflectors
+    House,
+    maybeHouseFromCols,
+    maybeHouseFromRows,
+    
     -- * Overloaded interface for matrices
     module Data.Matrix.Class,
     module Data.Matrix.Class.IMatrix,
@@ -24,6 +29,7 @@ module Data.Matrix.House (
     module Data.Matrix.Class.MSolve,
     ) where
 
+import Data.Matrix.HouseBase
 import Data.Matrix.ReflectorBase
 
 import Data.Matrix.Class

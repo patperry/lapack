@@ -12,6 +12,15 @@ module Data.Elem.LAPACK.Double
     where
 
 import Foreign( Ptr )
+import LAPACK.CTypes
 
-foreign import ccall unsafe "BLAS.h lapack_dlarfg"
+foreign import ccall unsafe "LAPACK.h lapack_dlarfg"
     dlarfg :: Int -> Ptr Double -> Ptr Double -> Int -> Ptr Double -> IO ()
+
+foreign import ccall unsafe "LAPACK.h lapack_dormqr"
+    dormqr :: CBLASSide -> CBLASTrans -> Int -> Int -> Int -> Ptr Double -> Int -> Ptr Double
+           -> Ptr Double -> Int -> Ptr Double -> Int -> IO Int
+
+foreign import ccall unsafe "LAPACK.h lapack_dormlq"
+    dormlq :: CBLASSide -> CBLASTrans -> Int -> Int -> Int -> Ptr Double -> Int -> Ptr Double
+           -> Ptr Double -> Int -> Ptr Double -> Int -> IO Int
