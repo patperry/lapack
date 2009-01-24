@@ -26,9 +26,11 @@ import Data.Elem.LAPACK.Zomplex
 
 -- | The LAPACK typeclass.
 class (BLAS3 e) => LAPACK e where
-    larfg :: Int -> Ptr e -> Ptr e -> Int -> IO e
+    geqrf :: Int -> Int -> Ptr e -> Int -> Ptr e -> IO ()
+    gelqf :: Int -> Int -> Ptr e -> Int -> Ptr e -> IO ()
     unmqr :: SideEnum -> TransEnum -> Int -> Int -> Int -> Ptr e -> Int -> Ptr e -> Ptr e -> Int -> IO ()
     unmlq :: SideEnum -> TransEnum -> Int -> Int -> Int -> Ptr e -> Int -> Ptr e -> Ptr e -> Int -> IO ()
+    larfg :: Int -> Ptr e -> Ptr e -> Int -> IO e
 
 callWithWork :: (Storable e) => (Ptr e -> Int -> IO a) -> IO a
 callWithWork call =
@@ -43,17 +45,25 @@ checkInfo :: Int -> IO ()
 checkInfo info = assert (info == 0) $ return ()
         
 instance LAPACK Double where
-    larfg n alpha x incx = with 0 $ \pTau -> 
-        dlarfg n alpha x incx pTau >> peek pTau
+    geqrf m n pA ldA pTau =
+        checkInfo =<< callWithWork (dgeqrf m n pA ldA pTau)
+    gelqf m n pA ldA pTau =
+        checkInfo =<< callWithWork (dgelqf m n pA ldA pTau)
     unmqr s t m n k pA ldA pTau pC ldC =
         checkInfo =<< callWithWork (dormqr (cblasSide s) (cblasTrans t) m n k pA ldA pTau pC ldC)
     unmlq s t m n k pA ldA pTau pC ldC =
         checkInfo =<< callWithWork (dormlq (cblasSide s) (cblasTrans t) m n k pA ldA pTau pC ldC)
+    larfg n alpha x incx = with 0 $ \pTau -> 
+        dlarfg n alpha x incx pTau >> peek pTau
 
 instance LAPACK (Complex Double) where
-    larfg n alpha x incx = with 0 $ \pTau -> 
-        zlarfg n alpha x incx pTau >> peek pTau
+    geqrf m n pA ldA pTau =
+        checkInfo =<< callWithWork (zgeqrf m n pA ldA pTau)
+    gelqf m n pA ldA pTau =
+        checkInfo =<< callWithWork (zgelqf m n pA ldA pTau)
     unmqr s t m n k pA ldA pTau pC ldC =
         checkInfo =<< callWithWork (zunmqr (cblasSide s) (cblasTrans t) m n k pA ldA pTau pC ldC)
     unmlq s t m n k pA ldA pTau pC ldC =
         checkInfo =<< callWithWork (zunmlq (cblasSide s) (cblasTrans t) m n k pA ldA pTau pC ldC)
+    larfg n alpha x incx = with 0 $ \pTau -> 
+        zlarfg n alpha x incx pTau >> peek pTau

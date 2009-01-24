@@ -14,13 +14,31 @@ static char *BLAS_DIAG_CODES[] = { "N", "U" };
 static char *BLAS_SIDE_CODES[] = { "L", "R" };
 #define SIDE(x) BLAS_SIDE_CODES[(int) (x) - (int) BlasLeft]
 
-extern void
-F77_FUNC(dlarfg) (const int *N, double *alpha, double *X, const int *incX, double *tau);
 
-void 
-lapack_dlarfg (const int N, double *alpha, double *X, const int incX, double *tau)
+extern void
+F77_FUNC(dgeqrf) (const int *M, const int *N, double *A, const int *ldA,
+                  double *tau, double *work, const int *lwork, const int *info);
+
+int 
+lapack_dgeqrf (const int M, const int N, double *A, const int ldA,
+               double *tau, double *work, const int lwork)
 {
-    F77_FUNC(dlarfg) (&N, alpha, X, &incX, tau);
+    int info = 0;
+    F77_FUNC(dgeqrf) (&M, &N, A, &ldA, tau, work, &lwork, &info);
+    return info;
+}
+
+extern void
+F77_FUNC(dgelqf) (const int *M, const int *N, double *A, const int *ldA,
+                  double *tau, double *work, const int *lwork, const int *info);
+
+int 
+lapack_dgelqf (const int M, const int N, double *A, const int ldA,
+               double *tau, double *work, const int lwork)
+{
+    int info = 0;
+    F77_FUNC(dgelqf) (&M, &N, A, &ldA, tau, work, &lwork, &info);
+    return info;
 }
 
 extern void
@@ -57,4 +75,13 @@ lapack_dormlq (const enum BLAS_SIDE side, const enum BLAS_TRANSPOSE trans,
     F77_FUNC(dormlq) (SIDE(side), TRANS(trans), &M, &N, &K, A, &ldA, tau, C,
                       &ldC, Work, &ldWork, &info);
     return info;
+}
+
+extern void
+F77_FUNC(dlarfg) (const int *N, double *alpha, double *X, const int *incX, double *tau);
+
+void 
+lapack_dlarfg (const int N, double *alpha, double *X, const int incX, double *tau)
+{
+    F77_FUNC(dlarfg) (&N, alpha, X, &incX, tau);
 }

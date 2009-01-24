@@ -17,8 +17,11 @@ import LAPACK.CTypes
 
 type Zomplex = Complex Double
 
-foreign import ccall unsafe "LAPACK.h lapack_zlarfg"
-    zlarfg :: Int -> Ptr Zomplex -> Ptr Zomplex -> Int -> Ptr Zomplex -> IO ()
+foreign import ccall unsafe "LAPACK.h lapack_zgeqrf"
+    zgeqrf :: Int -> Int -> Ptr Zomplex -> Int -> Ptr Zomplex -> Ptr Zomplex -> Int -> IO Int
+
+foreign import ccall unsafe "LAPACK.h lapack_zgelqf"
+    zgelqf :: Int -> Int -> Ptr Zomplex -> Int -> Ptr Zomplex -> Ptr Zomplex -> Int -> IO Int
 
 foreign import ccall unsafe "LAPACK.h lapack_dormqr"
     zunmqr :: CBLASSide -> CBLASTrans -> Int -> Int -> Int -> Ptr Zomplex -> Int -> Ptr Zomplex
@@ -27,3 +30,7 @@ foreign import ccall unsafe "LAPACK.h lapack_dormqr"
 foreign import ccall unsafe "LAPACK.h lapack_dormlq"
     zunmlq :: CBLASSide -> CBLASTrans -> Int -> Int -> Int -> Ptr Zomplex -> Int -> Ptr Zomplex
            -> Ptr Zomplex -> Int -> Ptr Zomplex -> Int -> IO Int
+
+foreign import ccall unsafe "LAPACK.h lapack_zlarfg"
+    zlarfg :: Int -> Ptr Zomplex -> Ptr Zomplex -> Int -> Ptr Zomplex -> IO ()
+

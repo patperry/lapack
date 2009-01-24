@@ -42,6 +42,7 @@ library
                         Data.Elem.LAPACK
                         Data.Elem.LAPACK.C
                         Data.Matrix.House
+                        Data.Matrix.QR
     other-modules:
                         Data.Elem.LAPACK.Double
                         Data.Elem.LAPACK.Zomplex
