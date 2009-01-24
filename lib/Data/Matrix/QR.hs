@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE FlexibleInstances, GADTs, MultiParamTypeClasses #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module     : Data.Matrix.QR
