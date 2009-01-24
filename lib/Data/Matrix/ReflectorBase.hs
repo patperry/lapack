@@ -153,6 +153,8 @@ instance Shaped Reflector (Int,Int) where
     {-# INLINE bounds #-}
 
 instance MatrixShaped Reflector where
+
+instance HasHerm Reflector where
     herm = hermReflector
     {-# INLINE herm #-}
 

@@ -186,6 +186,8 @@ instance Shaped House (Int,Int) where
     {-# INLINE bounds #-}
 
 instance MatrixShaped House where
+
+instance HasHerm House where
     herm (ColumnWise h a tau) = ColumnWise (flipTrans h) a tau
     herm (RowWise    h a tau) = RowWise    (flipTrans h) a tau
     {-# INLINE herm #-}
