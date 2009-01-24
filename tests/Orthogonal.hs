@@ -5,7 +5,7 @@ module Orthogonal
 import Driver
 import Monadic
 import Test.QuickCheck hiding ( vector )
-import Test.QuickCheck.BLAS( Pos(..) )
+import Test.QuickCheck.BLAS( Pos(..), Nat2(..) )
 import qualified Test.QuickCheck.BLAS as Test
 
 import Control.Monad
@@ -14,7 +14,11 @@ import Data.Elem.BLAS
 import Data.Vector.Dense
 import Data.Vector.Dense.ST
 import Data.Matrix.Dense
+import Data.Matrix.Dense.ST
 import Data.Matrix.House
+import Data.Matrix.QR
+
+import Debug.Trace
 
 prop_setReflector_snd (Pos n) = 
     monadicST $ do
@@ -42,9 +46,31 @@ prop_reflector_matrix (Pos n) =
             ra       = colsMatrix (n,p) [ (k*beta) *> basisVector n 0 | k <- es ]
         in herm r <**> a ~== ra
 
+prop_qrFactor (Nat2 mn) =
+    forAll (Test.matrix mn) $ \(a :: M) ->
+        let qr    = qrFactor a
+            (q,r) = (qrQ qr, qrR qr)
+            i     = identityMatrix (numCols r, numCols r)
+            a'    = q <**> r <**> i
+        in a' ~== a
+
+prop_qrFactor_solveVector (Nat2 mn) =
+    forAll (Test.matrix mn) $ \(a :: M) ->
+        let a' = runSTMatrix (do
+                     ma <- unsafeThawMatrix a
+                     setConstant 1 (diagView ma 0)
+                     return ma) in
+        forAll (Test.vector $ snd mn) $ \x ->
+            let y  = a' <*> x
+                x' = qrFactor a' <\> y
+                y' = a' <*> x'
+            in y' ~== y
+
 tests_Orthogonal =
     [ ("snd . setReflector", mytest prop_setReflector_snd)
     , ("fst . reflector", mytest prop_reflector_fst)
     , ("reflector <*>", mytest prop_reflector_vector)
     , ("reflector <**>", mytest prop_reflector_matrix)
+    , ("qrFactor", mytest prop_qrFactor)
+    , ("qrFactor solveVector", mytest prop_qrFactor_solveVector)
     ]

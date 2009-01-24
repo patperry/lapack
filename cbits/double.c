@@ -2,7 +2,8 @@
 #include "LAPACK.h"
 #include "config.h"
 
-static char *BLAS_TRANS_CODES[] = { "N", "T", "C" };
+
+static char *BLAS_TRANS_CODES[] = { "N", "T", "T" };
 #define TRANS(x) BLAS_TRANS_CODES[(int) (x) - (int) BlasNoTrans]
 
 static char *BLAS_UPLO_CODES[] = { "U", "L" };

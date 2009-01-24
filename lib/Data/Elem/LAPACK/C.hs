@@ -37,7 +37,7 @@ callWithWork call =
     alloca $ \pQuery -> do
         call pQuery (-1)
         ldWork <- peek (castPtr pQuery) :: IO Double
-        let lWork = ceiling ldWork
+        let lWork = max 1 $ ceiling ldWork
         allocaArray lWork $ \pWork -> do
             call pWork lWork
 

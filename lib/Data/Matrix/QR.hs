@@ -96,7 +96,9 @@ qrFactor a = runST $ getQRFactor a
 
 -- | Get the QR factorization of a dense matrix.
 getQRFactor :: (ReadMatrix a m, LAPACK e) => a (n,p) e -> m (QR (n,p) e)
-getQRFactor a = unsafePerformIOWithMatrix a qrFactorize
+getQRFactor a = unsafePerformIOWithMatrix a $ \a' -> do
+    a'' <- newCopyMatrix a'
+    qrFactorize a''
 {-# INLINE getQRFactor #-}
 
 -- | Compute the QR factorization of a matrix in-place and return the 
@@ -135,9 +137,9 @@ qrFactorize a
                      in return $ QR q r
                 else let q = fromJust $ flip maybeHouseFromCols tau' $ lowerU a''
                          r = upper a''
-                    in return $ QR q r
+                     in return $ QR q r
   where (n,p)   = shape a
         (n',p') = if isHermMatrix a then (p,n) else (n,p)
-        np      = max 1 (min n p)
+        np      = min n p
         ldA     = ldaMatrix a
 {-# INLINE qrFactorize #-}

@@ -23,11 +23,11 @@ foreign import ccall unsafe "LAPACK.h lapack_zgeqrf"
 foreign import ccall unsafe "LAPACK.h lapack_zgelqf"
     zgelqf :: Int -> Int -> Ptr Zomplex -> Int -> Ptr Zomplex -> Ptr Zomplex -> Int -> IO Int
 
-foreign import ccall unsafe "LAPACK.h lapack_dormqr"
+foreign import ccall unsafe "LAPACK.h lapack_zunmqr"
     zunmqr :: CBLASSide -> CBLASTrans -> Int -> Int -> Int -> Ptr Zomplex -> Int -> Ptr Zomplex
            -> Ptr Zomplex -> Int -> Ptr Zomplex -> Int -> IO Int
 
-foreign import ccall unsafe "LAPACK.h lapack_dormlq"
+foreign import ccall unsafe "LAPACK.h lapack_zunmlq"
     zunmlq :: CBLASSide -> CBLASTrans -> Int -> Int -> Int -> Ptr Zomplex -> Int -> Ptr Zomplex
            -> Ptr Zomplex -> Int -> Ptr Zomplex -> Int -> IO Int
 
