@@ -66,6 +66,35 @@ prop_qrFactor_solveVector (Nat2 mn) =
                 y' = a' <*> x'
             in y' ~== y
 
+prop_qrFactor_doSSolveVector alpha (Nat2 (n,p)) =
+    forAll (Test.matrix (n,p)) $ \(a :: M) ->
+        let a' = runSTMatrix (do
+                     ma <- unsafeThawMatrix a
+                     setConstant 1 (diagView ma 0)
+                     return ma) in
+        forAll (Test.vector p) $ \x ->
+        forAll (Test.vector n) $ \y -> 
+            let qr = qrFactor a' in 
+            monadicST $ do
+                x' <- run $ unsafeThawVector x
+                run $ doSSolveVector alpha qr y x'
+                assert $ x ~== qr <\> (alpha *> y)
+
+prop_qrFactor_doSSolveMatrix alpha (Nat2 (n,p)) =
+    forAll (Test.matrix (n,p)) $ \(a :: M) ->
+        let a' = runSTMatrix (do
+                     ma <- unsafeThawMatrix a
+                     setConstant 1 (diagView ma 0)
+                     return ma) in
+        forAll (liftM snd Test.shape) $ \q ->
+        forAll (Test.matrix (p,q)) $ \b ->
+        forAll (Test.matrix (n,q)) $ \c -> 
+            let qr = qrFactor a' in 
+            monadicST $ do
+                b' <- run $ unsafeThawMatrix b
+                run $ doSSolveMatrix alpha qr c b'
+                assert $ b ~== qr <\\> (alpha *> c)
+
 tests_Orthogonal =
     [ ("snd . setReflector", mytest prop_setReflector_snd)
     , ("fst . reflector", mytest prop_reflector_fst)
@@ -73,4 +102,6 @@ tests_Orthogonal =
     , ("reflector <**>", mytest prop_reflector_matrix)
     , ("qrFactor", mytest prop_qrFactor)
     , ("qrFactor solveVector", mytest prop_qrFactor_solveVector)
+    , ("qrFactor doSolveVector", mytest prop_qrFactor_doSSolveVector)    
+    , ("qrFactor doSolveMatrix", mytest prop_qrFactor_doSSolveMatrix)
     ]
