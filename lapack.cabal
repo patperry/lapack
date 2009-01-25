@@ -42,6 +42,7 @@ library
                         Data.Elem.LAPACK
                         Data.Elem.LAPACK.C
                         Data.Matrix.House
+                        Data.Matrix.Perm
                         Data.Matrix.QR
     other-modules:
                         Data.Elem.LAPACK.Double
@@ -61,6 +62,6 @@ library
                         GADTs
                         MultiParamTypeClasses
 
-    build-depends:      base, blas >=0.8, ieee, permutation >=0.2,
+    build-depends:      base, blas >=0.8, ieee, permutation >=0.4.1,
                         monad-interleave, QuickCheck >=1.2, QuickCheck <2
 
