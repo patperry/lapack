@@ -103,8 +103,8 @@ unsafeGetColPerm :: (WriteVector x m, Elem e)
                  => Perm (n,p) e -> Int -> m (x n e)
 unsafeGetColPerm (Identity n)   j = newBasisVector n j
 unsafeGetColPerm (Perm h sigma) j
-    | h == NoTrans = newBasisVector n (P.unsafeAt sigma j)
-    | otherwise    = newBasisVector n (P.indexOf sigma j)
+    | h == NoTrans = newBasisVector n (P.indexOf sigma j)
+    | otherwise    = newBasisVector n (P.unsafeAt sigma j)
   where
     n = P.size sigma
 {-# INLINE unsafeGetColPerm #-}
@@ -153,11 +153,11 @@ unsafeDoSApplyAddPerm alpha p@(Perm h sigma) x beta y
             forM_ [0..(n-1)] $ \i ->
                 let i' = P.unsafeAt sigma i in
                 case h of
-                   NoTrans -> do
+                   ConjTrans -> do
                         e <- unsafeReadElem x i  
                         f <- unsafeReadElem y i'
                         unsafeWriteElem y i' (alpha*e + f)
-                   ConjTrans  -> do
+                   NoTrans  -> do
                         e <- unsafeReadElem x i'
                         f <- unsafeReadElem y i
                         unsafeWriteElem y i (alpha*e + f)
@@ -175,9 +175,9 @@ unsafeDoSApplyAddMatPerm alpha p@(Perm h sigma) b beta c =
         forM_ [0..(m-1)] $ \i ->
             let i' = P.unsafeAt sigma i in
             case h of
-                NoTrans   -> unsafeAxpyVector alpha (unsafeRowView b i)
+                ConjTrans -> unsafeAxpyVector alpha (unsafeRowView b i)
                                                     (unsafeRowView c i') 
-                ConjTrans -> unsafeAxpyVector alpha (unsafeRowView b i') 
+                NoTrans   -> unsafeAxpyVector alpha (unsafeRowView b i') 
                                                     (unsafeRowView c i)
 {-# INLINE unsafeDoSApplyAddMatPerm #-}
 

@@ -9,7 +9,7 @@ import Orthogonal( tests_Orthogonal )
 main :: IO ()
 main = do
     args <- getArgs
-    let n = if null args then 1000 else read (head args)
+    let n = if null args then 100 else read (head args)
     
     printf "\nRunnings tests for field `%s'\n" field
     
